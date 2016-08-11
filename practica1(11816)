@@ -20,3 +20,8 @@ attach(base1.1) #se declara que se trabajara a partir de la fila 19 (en éste ca
 table(edad)
 detach(base1.1) #se declara que ya no se trabajara con la base1.1
 summary(base1.1$edad)
+##importar base de datos
+install.packages("foreign")
+require(foreign)
+sociodem <-read.dbf("C://Users//SALA-C18//Documents//SDEMT215.dbf") #se copia la ubicacion del doc, se cambian las diagonales por las diag inversas y dobles y se agregan al final, se copia al final el nombre del doc
+table(sociodem$SEX) #el simbolo $ es para seleccionar la variable
