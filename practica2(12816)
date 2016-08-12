@@ -1,0 +1,46 @@
+#limpiar el entorno de trabajo (lo del lado derecho)
+rm(list = ls())
+#Ctrl + L para limpiar consola
+
+#definir el directorio raíz de las bases de datos (abrir la base de datos)
+setwd("C://Users//SALA-C9//Downloads")
+require(foreign)
+SDEMT215 <- data.frame(read.dbf("SDEMT215.dbf"))
+
+#verla como base de datos
+View (SDEMT215)
+
+#otra función para table
+install.packages("questionr")
+require(questionr)
+#para elegir una variable (el 0 significa las personas que estan en la base de datos que no les hicieron las preguntas)
+wtd.table(SDEMT215$POS_OCU)
+#na es para saber cuántos valores perdidos hay
+wtd.table(SDEMT215$POS_OCU,na.show=TRUE)
+
+#Frecuencias con datos ponderados
+#si quitamos na.show=true r por default asegura que es false y no da ese dato
+wtd.table(SDEMT215$POS_OCU,weights = SDEMT215$FAC,na.show=TRUE)
+#tabulados con datos muestrales (sin ponderar)
+wtd.table(SDEMT215$SEX,SDEMT215$POS_OCU)
+#tabulados con datos muestrales ponderados
+wtd.table(SDEMT215$SEX,SDEMT215$POS_OCU,weights = SDEMT215$FAC)#FAC=factor expansión
+
+#ejercicio
+#1)Obtener la frecuencia de la variable clase1 (muestral)
+wtd.table(SDEMT215$CLASE1)
+#2)Obtener el tabulado de entidad y sexo (muestral y ponderado)
+wtd.table(SDEMT215$ENT,SDEMT215$SEX) #muestral
+wtd.table(SDEMT215$ENT,SDEMT215$SEX,weights = SDEMT215$FAC)#ponderado
+
+#
+wtd.table(SDEMT215$SEX)
+#etiquetar variable
+SDEMT215$SEXO <- factor(SDEMT215$SEX,levels=c(1,2),labels = c("Hombre","Mujer"))
+wtd.table(SDEMT215$SEXO)
+
+View(SDEMT215)
+
+#etiquetar en la misma variable
+SDEMT215$POS_OCU<-factor(SDEMT215$POS_OCU,levels = c(1,2,3,4,5),labels = c("Subordinados y remunerados","Empleadores","Cuenta propia","Sin pago","NE"))
+wtd.table(SDEMT215$POS_OCU)
