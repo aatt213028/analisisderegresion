@@ -1,0 +1,33 @@
+#estaturas 1.2,1.23,1.19,1.32,1.28,1.22,1.17,1.29,1.33,1.15
+#nivel econ+omico 110,130,108,167,156,115,104,138,170,107
+#comprobar la hipotesios que entre amyor ingreso de la familia
+#hay una mayor estatura en los niños
+esta<-c(1.2,1.23,1.19,1.32,1.28,1.22,1.17,1.29,1.33,1.15)
+eco<-c(110,130,108,167,156,115,104,138,170,107)
+plot(eco, esta, pch=11, xlab = "ingreso económico", ylab = "estatura", main = "gráfica de dispersión", col="blue") #col para dar color a las estrellas
+
+cor(esta, eco, method = "pearson")
+#la forma general cor() es...
+#1) var dependiente
+#2) var independiente
+#3) método de correlación
+help(cor)
+
+#una vez sabido que tenemos una relación buena
+#para realizar una prieba de correlación
+#una función que se define cor.test()
+#la prueba de hipotesis para esta función es Ho= r= 0 no hay relación
+#ie, no hay relación, ha=!  si relación
+#si es menor ... se rechaza la nula
+#misma lógica que cor()
+cor.test(esta, eco, method = "pearson")
+
+#ya confirmada la correlación aplicamos el modelo
+#para plicar el modelo se utiliza la función lm()
+mod1<-lm(esta~eco)
+summary(mod1)
+#entre más sercanos a cero es mejor el modelo
+
+abline(mod1) #da la recta ajustada con base a los coeficientes del modelo
+
+esta = .9323 + (.0023)*(eco)  #ecuación
