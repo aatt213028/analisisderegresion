@@ -1,0 +1,33 @@
+summary(mod1)$coefficients
+#se tiene un ejuste
+esta = .9323 + (.0023)*(eco)
+summary(mod1)
+###los valores de pvalue son inferiores a .05 por lo que...
+#1) relación lineal entre la var dependiente y la independiente
+# relacion positiva
+#por cada peso de ingreso que aumenta el padre o madre aumenta la estatura en .0023
+#el error estandar residual es .0198 este valor es muy importante debido a que permite medir la calidad del modelo
+#con este error generamos los intervalos de confianza
+#los IC nos permiten complementar la información sobre las estimaciones
+#para calcular la IC se utiliza
+confint(mod1, level = .95) #confianza del 95
+#interpretación... con una probabilidad de 95% b0 se encuentra en el intervalo (.0017,.0029)
+
+###Bondad de ajuste
+#se verifica la calidad del modelo
+#al interpretar la variable dependiente se utiliza la tabla anova
+anova(mod1)
+#en este caso la variabilidad explicada del modlo es .033022=SSM
+#se revisa la SSR=.0031
+#revisando los valores del summary el estadistico
+#F es mayor a 1 y p-value<.05
+#con estas revisiones se puede mencionar que se rechaza la hipotesis nula de F=1 y se puede establecer un modelo.
+
+summary(mod1)
+###Revisar R2 multiple
+#alrededor del 91% de la variabilidad es explicada por la recta ajustada
+#supuestos:
+base1<-data.frame(eco,esta)
+base1$fitted.mod1<-fitted(mod1)
+base1$residuals.mod1<-residuals(mod1)
+base1$rstudent.mod1<-rstudent(mod1)
