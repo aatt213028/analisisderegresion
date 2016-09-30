@@ -47,5 +47,5 @@ influenceplot(modmo)
 install.packages("faraway")
 require(faraway)
 dc<-cooks.distance(modmo)
-etiqueta<-rownames(mochil)
+etiqueta<-rownames(mochil) #detectar el nombre de las columnas
 halfnorm(dc, 3, etiqueta)
