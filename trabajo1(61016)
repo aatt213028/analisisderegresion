@@ -1,0 +1,23 @@
+corredor<- c( "wall st", "etrade1", "etrade2", "pretrade", "track", "water house", "brown", "br america","merrill lynch","strong funds")
+operacion <- c(3.7, 3.4, 2.5, 4.8, 4, 3, 2.7, 1.7, 2.2, 1.4) #independiente
+uso <- c(4.5, 3, 4, 3.7, 3.5, 3, 2.5, 3.5, 2.7, 3.6) #independiente
+gama <- c(4.8, 4.2, 4, 3.4, 3.2, 4.6, 3.3, 3.1, 3, 2.5) #independiente
+estrellas <- c(4, 3.5, 3.5, 3.5, 3.5, 3.5, 3, 3, 2.5, 2) #dependiente
+
+
+A)
+
+mod<-lm(estrellas~uso+gama+operacion)
+summary(mod)
+
+estre=0.34510+(.13249)*uso+(.45852)*gama+(.25482)*operacion
+
+B)
+
+confint(mod, level = .95)
+anova(mod)
+#F es mayor a 1 y p-value<.05
+
+d)
+
+e)
