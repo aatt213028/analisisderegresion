@@ -1,0 +1,50 @@
+y<-c(25.5, 31.2, 25.9, 38.4, 18.4, 26.7, 26.4,25.9,32,25.2,39.7,35.7,26.5)
+x1<-c(1.74,6.32,6.2,10.52,1.19,1.22,4.10,6.32,4.08,4.15,10.15,1.72,1.70)
+x2<-c(5.30,5.42,8.41,4.63,11.60,5.85,6.62,8.72,4.42,7.60,4.83,3.12,5.3)
+x3<-c(10.8,9.4,7.2,8.5,9.4,9.9,8,9.1,8.7,9.2,9.4,7.6,8.2)
+
+#0)gráfica de dispersión y correlaciones
+##juntas
+h<- data.frame(y, x1, x2, x3)
+plot(h, pch=11, main = "grafica de dispersion", col="blue")
+cor(h, method = "pearson")
+
+##por cada una
+plot(x1, y, pch=11, xlab="x1", ylab = "y", main = "grafica de dispersion", col="blue")
+cor(y, x1, method = "pearson")
+cor.test(y, x1, method = "pearson")
+#existe correlacion de 0.6542986
+
+plot(x2, y, pch=11, xlab="x2", ylab = "y", main = "grafica de dispersion", col="blue")
+cor(y, x2, method = "pearson")
+cor.test(y, x2, method = "pearson")
+#existe correlacion de -0.785805
+
+plot(x3, y, pch=11, xlab="x3", ylab = "y", main = "grafica de dispersion", col="blue")
+cor(y, x3, method = "pearson")
+cor.test(y, x3, method = "pearson")
+#existe correlacion de -0.186275
+
+#1)ecuación
+t<-lm(y~x1+x2+x3)
+summary(t)
+yec=39.1767+(1.0166)*(x1)+(-1.8608)*(x2)+(-0.3461)*(x3)
+
+#2)anova, r cuadrada, estadistico F
+anova(t)
+#F resultante es menor a 0.05, entnces se acepta la hipotesis nula
+summary(t)
+#rcuadrada es igual a 0.9119 y r ajustada es 0.8825, F sigue siendo menor a 0.05
+
+#3)Metodo backward
+step(t, direction = "backward")
+#El metodo evaluo don modelos:
+#1: y ~ x1 + x2 + x3 con un AIC=22.15
+#2: y ~ x1 + x2 con un AIC=20.6
+
+#4)Kolmogorov
+ks.test(t, "pnorm")
+#4.1)Breush
+#4.2)Durbin
+dwtest(t, alternative="two.sided", data = h)
+#DW=1.5689, pvalue=0.4128
