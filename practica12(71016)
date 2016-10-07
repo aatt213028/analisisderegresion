@@ -1,0 +1,22 @@
+mod2<- lm(precio~calidad, data = moch)
+#aplicar los supuestos para ver si tenemos un buen modelo
+
+moch$ajus<-fitted(mod2)
+moch$resi<-residuals(mod2)
+moch$rstud<-rstudent(mod2)
+
+#Supuesto de normalidad
+install.packages("lmtest")
+require (lmtest)
+ks.test(moch$rstud, "pnorm")
+
+#histograma
+hist(moch$rstud, xlab="residuales", main="Hist residuales")
+
+#El p valor para el contraste de normalidad es mayor que 0.05 (P=0.9719) y ademas el histograma se parece a una distribucion normal (curva en forma de campana) entonces no hay problemas de normalidad
+
+#Supuesto de homogeneidad de varianzas
+bptest(mod2, studentize = FALSE, data=moch)
+#p=0.4154, mayor a 0.05, ie, que la varianza es constante a lo largo de la muestra
+dwtest(mod2, alternative = "two.sided", data = moch)
+#Aceptamos la hipotesis nula, entonces no existe correlacion entres los residuos con un p-valor superior a 0.05 (pvalue=0.2976)
