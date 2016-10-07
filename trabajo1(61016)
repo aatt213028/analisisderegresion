@@ -5,19 +5,48 @@ gama <- c(4.8, 4.2, 4, 3.4, 3.2, 4.6, 3.3, 3.1, 3, 2.5) #independiente
 estrellas <- c(4, 3.5, 3.5, 3.5, 3.5, 3.5, 3, 3, 2.5, 2) #dependiente
 
 
-A)
+holi<- data.frame(estrellas, uso, gama, operacion)
+
+#A)
 
 mod<-lm(estrellas~uso+gama+operacion)
 summary(mod)
 
 estre=0.34510+(.13249)*uso+(.45852)*gama+(.25482)*operacion
 
-B)
+#B)
 
 confint(mod, level = .95)
 anova(mod)
 #F es mayor a 1 y p-value<.05
+#entonces se rechaza la hipotesis nula y se establece un modelo
 
-d)
+#C)
 
-e)
+#4to supuesto
+plot(mod, which = 5, pch=3)
+#el 4,8,10 son los de menor importancia
+
+hol<-holi[c(-4,-8,-10),] #eliminando las de menor importancia
+
+#C.1)
+mod1<-lm(hol)
+summary(mod1)
+#la nueva ecuación quedaría:
+estre2=0.4690+(.2104)*uso+(0.3180)*gama+(0.3126)*operacion
+
+#comparar r2
+#en el inciso a r2=0.8284 y la nueva r2 es igual a 0.8919
+#el porcentaje subió, lo cual indica que sí mejoró el modelo ajustado
+
+#D)
+#modelos:
+#1)estrellas~uso
+#2)estrellas~gama
+#3)estrellas~operacion
+#4)estrellas~uso+gama+operacion
+
+##Metodo backward
+step(mod1, direction = "backward")
+#el metodo analizó un modelo: estrellas~usp+gama+operacion
+#obteniendo un AIC=-23.91
