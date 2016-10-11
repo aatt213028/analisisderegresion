@@ -1,0 +1,10 @@
+###trabajo 3
+yt<-c(10,25,32,43,58,62,67,71)
+x1<-c(1,3,4,5,7,8,10,10)
+x2<-c(0,-1,0,1,-1,0,-1,2)
+
+m<-lm(yt~x1+x2)
+summary(m)
+#la recta tiene el 96% de variabilidad, y por pvalue se indica que es mejor que el modelo básico
+
+ec<-6.47+(6.5883)*(x1)+(0.2573)*(x2)
