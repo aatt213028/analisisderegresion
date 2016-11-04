@@ -1,0 +1,12 @@
+setwd("dondeestaguardadoelarchivo")
+require(foreign)
+mti2013 <- data.frame(read.dbf("nombredelarchivo"))
+
+wtd.table (mti2013$T_LOC, weights=mti2013$FAC_MTI)
+wtd.table (mti2013$T_LOC, mti2013$CLASE2, weights=mti2013$FAC_MTI)
+
+#población objetivo
+mti2013po <- subset (mti2013, mti2013$CLASE2 ==1 & mti2013$T_LOC ==4) #para hacer filtros
+require(questionr)
+wtd.table (mti2013po$SEX, weights=mti2013po$FAC_MTI)
+wtd.table (mti2013po$T_PER, weights=mti2013po$FAC_MTI)
