@@ -1,0 +1,15 @@
+install.packages("foreign")
+require(foreign)
+#importar base
+base <-read.spss("C://Users//Sala-C27//Downloads//solorural.sav")
+View(base)
+
+#población 5-17
+require(questionr)
+wtd.table (base$sex, weights = base$fac_mti) #hombres=4061217 y mujeres=3800117
+
+wtd.table(base$clase2==1, weights = base$fac_mti) #ocupados=827462
+
+wtd.table (base$clase2==1&base$sex=="hombres", weights = base$fac_mti) #hombres ocupados=622492
+
+wtd.table (base$clase2==1&base$sex=="mujeres", weights = base$fac_mti) #mujeres ocupadas=204970
