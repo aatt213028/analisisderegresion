@@ -1,0 +1,61 @@
+install.packages("foreign")
+require(foreign)
+#importar base
+base <-read.spss("C://Users//Sala-C26//Downloads//solorural.sav")
+base<-data.frame(base)
+library(questionr)
+
+#población 5-17
+require(questionr)
+wtd.table (base$sex, weights = base$fac_mti) #hombres=4061217 y mujeres=3800117
+
+wtd.table(base$clase2==1, weights = base$fac_mti) #ocupados=827462
+
+wtd.table (base$clase2==1&base$sex=="hombres", weights = base$fac_mti) #hombres ocupados=622492
+
+wtd.table (base$clase2==1&base$sex=="mujeres", weights = base$fac_mti) #mujeres ocupadas=204970
+
+oc<-subset(base, base$c_ocu=="ocupado")
+
+#recodificar
+#utilizar variables: t_per~sex+eda1+asis+sex_jefe+escol_jefe+t_apo1+ocu_jefe
+table(oc$t_per) #recodificar, solo dejar en 3 categorias ---
+table(oc$sex) #correcta
+table(oc$eda1, oc$eda) #var recodif ayer ***** agrupar
+table(oc$asis) #revisar, correcta
+table(oc$sex_jefe) #correcta
+table(oc$escol_jefe) #recodif y elim no especif
+table(oc$t_apo1) #recodif y elim no especif
+table(oc$ocu_jefe) #correcta
+
+#otra forma de recodificar
+install.packages("plyr")
+library(plyr)
+oc$t_per<-revalue(factor(oc$t_per),c("4"=NA))
+table(oc$t_per) ####falta eriquetar
+oc$escol_jefe<-revalue(factor(oc$escol_jefe),c("No especificado"=NA))
+table(oc$escol_jefe)
+oc$t_apo1<-revalue(factor(oc$t_apo1),c("Otro tipo de ayuda"=NA))
+table(oc$t_apo1)
+
+#agrupar edades
+oc$eda1<-revalue(factor(oc$eda1), c("1"="5 a 9", "2"="10 a 13", "3"="14 a 17"))
+table(oc$eda1)
+
+#etiquetar
+oc$t_per<-factor(oc$t_per, levels=c(1,2,3), labels = c("familiar", "no familiar", "cuenta propia"))
+table(oc$t_per)
+
+###nnet paqueteria para variables independientes de mas de 2 categorias
+require(nnet)
+mod1<-multinom(t_per~1,data = oc)
+summary(mod1)
+modfin<-multinom(t_per~sex+eda1+asis+sex_jefe+escol_jefe+t_apo1+ocu_jefe, data = oc)
+p<-summary(modfin, wald=T)
+print(p)
+
+##guardar como tabla de LaTex
+install.packages("stargazer")
+require(stargazer)
+s<-stargazer(modfin, type = "html", title = "coefficients", summary = T)
+stargazer(modfin, type = "text", title = "mlogit", summary = T, digits = 2, out = "C://Users//Sala-C26//Downloads//aylin.txt")
