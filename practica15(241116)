@@ -1,0 +1,68 @@
+###############con el profe
+install.packages("foreign")
+require(foreign)
+#importar base
+base <-read.spss("C://Users//sala-c10//Documents//solorural.sav")
+base<-data.frame(base)
+library(questionr)
+oc<-subset(base, base$c_ocu=="ocupado")
+######################################
+#utilizar variables: t_per~sex+eda1+asis+sex_jefe+tam_hog+t_apo1+ocu_jefe
+table(oc$sex)
+table(oc$asis)
+table(oc$sex_jefe)
+table(oc$tam_hog)
+table(oc$ocu_jefe)
+
+install.packages("plyr")
+library(plyr)
+oc$t_per<-revalue(factor(oc$t_per),c("4"=NA))
+#etiquetar
+oc$t_per<-factor(oc$t_per, levels=c(1,2,3), labels = c("familiar", "no familiar", "cuenta propia"))
+table(oc$t_per)
+
+oc$t_apo1<-revalue(factor(oc$t_apo1),c("Otro tipo de ayuda"=NA))
+table(oc$t_apo1)
+
+#agrupar edades
+oc$eda1<-revalue(factor(oc$eda1), c("1"="5 a 9", "2"="10 a 13", "3"="14 a 17"))
+table(oc$eda1)
+###################################
+###nnet paqueteria para variables independientes de mas de 2 categorias
+require(nnet)
+mod1<-multinom(t_per~1,data = oc, trace=FALSE)
+summary(mod1)
+modfin<-multinom(t_per~sex+eda1+asis+sex_jefe+tam_hog+t_apo1+ocu_jefe, data = oc)
+g<-summary(modfin, cor= F, wald=T)
+print(g)
+
+##guardar como tabla de LaTex
+install.packages("stargazer")
+require(stargazer)
+s<-stargazer(modfin, type = "html", title = "coefficients", summary = T)
+stargazer(modfin, type = "text", title = "mlogit", summary = T, digits = 2, out = "C://Users//Sala-C26//Downloads//aylin.txt")
+
+
+
+
+
+
+
+################equipo
+install.packages("questionr")
+require(questionr)
+install.packages("foreign")
+require(foreign)
+setwd("C://Users//sala-c10//Documents//ob")
+
+mti2015<-data.frame(read.dbf("mti2015_05_17_sdem_precodificado.DBF"))
+table(mti2015$EDA, mti2015$CLASE2)
+wtd.table(mti2015$T_LOC,weights=mti2015$FAC_MTI)
+wtd.table(mti2015$T_LOC,mti2015$CLASE2,weights=mti2015$FAC_MTI)
+########poblacion objetivo: niños ocupados y que sean de zonas rurales
+mti2015boj<-subset(mti2015,mti2015$CLASE2==1&mti2015$T_LOC==4)
+
+#################################################################
+#utilizar variables: t_per~sex+eda1+asis+sex_jefe+tam_hog+t_apo1+ocu_jefe
+table(mti2015boj$SEX)
+table(mti2015boj$ASIS)
